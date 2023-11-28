@@ -7,16 +7,23 @@
     "tcp": "adb reverse tcp:8081 tcp:8081",
     "pod": "cd ios && pod install && cd ..",
     "xcode": "open ios/*.xcworkspace",
-    "open-android-studio": "open -a /Applications/Android\\ Studio.app"
+    "open-android-studio": "open -a /Applications/Android\\ Studio.app",
+    "bugsnag:create-build": "bugsnag-cli create-build",
+    "bugsnag:upload-android": "bugsnag-cli upload react-native-android"
   },
   "dependencies": {
+    "@bugsnag/react-native": "^7.22.2",
+    "@bugsnag/react-native-performance": "^2.0.0",
     "react": "18.2.0",
-    "react-native": "0.72.7"
+    "react-native": "0.72.7",
+    "react-native-file-access": "^3.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@babel/preset-env": "^7.20.0",
     "@babel/runtime": "^7.20.0",
+    "@bugsnag/cli": "^2.0.0",
+    "@bugsnag/source-maps": "^2.3.1",
     "@react-native/eslint-config": "^0.72.2",
     "@react-native/metro-config": "^0.72.11",
     "@tsconfig/react-native": "^3.0.0",
