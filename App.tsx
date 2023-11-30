@@ -6,28 +6,52 @@
  */
 
 import React from 'react';
-import {Button, SafeAreaView, StatusBar, useColorScheme} from 'react-native';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Bugsnag from '@bugsnag/react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import HomeScreen from './src/screens/HomeScreen';
+
+export const user = {
+  id: '1',
+  name: 'Mickaël',
+  email: 'm.mesloub@beapp.fr',
+  isAdmin: true,
+  isLogged: false,
+};
+
+Bugsnag.start({
+  onError: event => {
+    event.addMetadata('UserDetails', user);
+  },
+});
+
+Bugsnag.notify(new Error('Automatic error'));
 
 function App(): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+  const ErrorBoundary = Bugsnag.getPlugin('react').createErrorBoundary(React);
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  const onError = () => {
+    console.log('render errror');
+    Bugsnag.notify(new Error('RENDER ERROR'), function (event) {
+      event.context = 'RENDER ERROR';
+    });
   };
 
+  // const ErrorView = ({clearError}) => (
+  //   <View>
+  //     <Text>
+  //       Inform users of an error in the component tree. Use clearError to reset
+  //       ErrorBoundary state and re-render child tree.
+  //     </Text>
+  //     <Button onPress={clearError} title="Reset" />
+  //   </View>
+  // );
+
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <Button
-        title="Notify"
-        onPress={() => Bugsnag.notify(new Error('Click error'))}
-      />
-    </SafeAreaView>
+    <NavigationContainer>
+      <ErrorBoundary onError={onError}>
+        <HomeScreen />
+      </ErrorBoundary>
+    </NavigationContainer>
   );
 }
 
